@@ -1,0 +1,707 @@
+---
+title: "An interactive dashboard for real-time analytics and monitoring of COVID-19 outbreak in India: a proof of concept"
+subtitle: "Arun Mitra, Biju Soman, Gurpreet Singh"
+author: 'Achutha Menon Centre for Health Science Studies, Sree Chitra Tirunal Institute for Medical Sciences and Technology, Thiruvananthapuram, India'
+date:  2021-05-28 | IFIP 9.4 Virtual Conference, 2021 | Data Science Track
+output:
+  xaringan::moon_reader:
+    css: 
+      - default
+      - css/nhsr.css
+      - css/nhsr-fonts.css
+    lib_dir: libs
+    seal: false
+    nature:
+      highlightStyle: googlecode
+      highlightLines: true
+      highlightLanguage: ["r"]
+      countIncrementalSlides: false
+      ratio: "16:9"
+    includes:
+      after_body: [css/insert-logo.html]
+---
+
+```{r setup, include = FALSE}
+library(knitr)
+library(tidyverse)
+library(nhsrtheme)
+library(xaringan)
+library(xaringanExtra)
+library(plotly)
+# set default options
+
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+xaringanExtra::use_panelset()
+
+# uncomment the following lines if you want to use the NHS-R theme colours by default
+# scale_fill_continuous <- partial(scale_fill_nhs, discrete = FALSE)
+# scale_fill_discrete <- partial(scale_fill_nhs, discrete = TRUE)
+# scale_colour_continuous <- partial(scale_colour_nhs, discrete = FALSE)
+# scale_colour_discrete <- partial(scale_colour_nhs, discrete = TRUE)
+```
+
+class: title-slide, left, bottom
+
+# `r rmarkdown::metadata$title`
+----
+## **`r rmarkdown::metadata$subtitle`**
+### `r rmarkdown::metadata$author`
+### `r rmarkdown::metadata$date`
+
+
+---
+# Background
+
+.panelset[
+
+.panel[.panel-name[COVID-19]
+
+### Introduction
+
+.large[
+The rapid spread of the COVID-19 pandemic has demanded collective action against coronavirus disease on an unprecedented scale.
+
+Governments, organizations, institutions, and individuals came up with a vast array of innovations and technological advances in the field of infectious disease epidemiology and vaccine research.
+
+
+Some of these innovations include innovative tools such as crowdsourced data generation, apps, dashboards, and tracker websites to monitor and track the COVID-19 outbreaks.
+]
+] <!-- End of Panel --->
+
+.panel[.panel-name[Dashboards]
+
+### Dashboards for Decision Making
+.large[
+Dashboards quickly became a popular tool to visualize and monitor the coronavirus disease spread and aid in decision-making and implementation of containment measures by tracking the critical epidemiological parameters and studying the transmission dynamics in real-time.
+]
+
+* Help in aggregating data from different sources in real-time
+* Can aid in decision making and inform policy decisions
+* Tools that can induce transparency
+* Can generate awareness among public
+* to monitor, and mitigate outbreaks
+* increase situational awareness
+* capacity building
+* monitor drug and intervention trials etc.
+
+] <!-- End of Panel --->
+
+.panel[.panel-name[Indian Context]
+
+### The Indian Context
+.pull-left[
+.large[
+* More relevant in a low resource setting like India.
+
+* Especially for a resilient healthcare system.
+
+* However, some gaps still remain.
+
+]
+]
+.pull-right[
+
+A quick review of 31 COVID-19 dashboards in India reveals:
+
+* 23/31 are Interactive
+
+* 17/31 are by Governmental Organizations
+
+* 5/31 are by Academic Institutions
+
+* 10/31 did not reveal on the source of the data
+
+* 6/31 tried to estimate transmission parameters
+
+* 3/31 attempted to model the epidemic 
+
+]
+] <!-- End of Panel --->
+
+] <!-- End of Panelset --->
+
+---
+
+class: middle
+
+# Objective
+
+.large[
+1.  To demonstrate the application of data analytics, data visualization, and epidemiological techniques and develop an interactive decision support system.
+
+2.  To estimate the epidemiological parameters of the COVID-19 outbreak in India.
+
+3.  To make projections for future daily incidence based on the estimated epidemiological parameters in real-time.
+]
+
+---
+# Methods
+
+.panelset[
+
+.panel[ .panel-name[Data]
+
+### Data Sources
+
+* In India, confirmed cases of COVID-19 and deaths are reported to the Ministry of Health and Family Welfare (MoHFW), Government of India, through the national reporting network.  
+
+* Crowdsourced database and website maintained at https://covid19india.org.  Accessible through an API.
+
+* Maintains data regarding daily testing and vaccinations also.
+
+* The source of the data relating to district level population density was Census 2011, conducted by the Government of India and also the Unique Identification Authority of India, Govt India for the projected population of 2020.
+
+] <!--end of panel-->
+
+.panel[ .panel-name[Variables]
+
+### Variables Used
+
+.large[
+* Daily Confirmed
+
+* Daily Recovered
+
+* Daily Deceased
+
+* Daily Testing
+
+* Daily Vaccinations
+]
+
+] <!--end of panel-->
+
+.panel[ .panel-name[Parameters]
+
+### Epidemiological and Transmission Parameters estimated 
+
+.pull-left[
+.large[
+* Growth Rate
+
+* Doubling Time
+
+* Effective Reproduction Number (Rt)
+
+* Case Fatality Rate
+
+* Test Positivity Rate
+]
+]
+.pull-right[
+.large[
+* Proportion of infected population
+
+* Proportion of population over 18 years who are vaccinated
+
+* Active Case Density
+
+* Deaths per 1000 confirmed cases
+]
+] 
+
+] <!--end of panel-->
+
+.panel[ .panel-name[Projections]
+
+### 15-Day future incidence projections
+
+.large[
+* Based on estimated Rt 
+
+* Future daily incidence for 15 days
+
+* Regression over log-incidence method
+
+* Validation by curve fitting and plotting against observed values
+]
+] <!--end of panel-->
+
+.panel[ .panel-name[Tools]
+
+### Tools used
+
+.pull-left[
+
+* R and R Studio
+
+* R Epidemics Consortium (RECon) 
+  - `incidence`
+  
+  - `projections`
+  
+  - `R0`
+  
+  - `EpiEstim`
+  
+  - `epitrix`
+  
+  - `distcrete` 
+]
+
+.pull-right[
+
+
+* Data Cleaning and Manipulation
+  - `tidyverse`
+  
+  - `dplyr`
+
+* Data Visualization
+  - `ggplot2`
+  
+  - `plotly`
+  
+* Interactive Dashboards
+  - `flexdashboard`
+  
+  - `shiny`
+  
+]
+
+] <!--end of panel-->
+
+.panel[ .panel-name[Audience]
+### Target Audience
+
+This dashboard has been developed keeping in mind the following users and purposes.
+
+|          |     Intended Users                     |     Intended Purpose                                                                |     Mode                               |     Updates      |
+|----------|----------------------------------------|-------------------------------------------------------------------------------------|----------------------------------------|------------------|
+|     1    |     District-level program managers    |     Evidence informed decision making; feedback on   future improvements            |     Interactive Dashboard              |     Real-time    |
+|     2    |     Decision makers                    |     Evidence informed decision making                                               |     Dashboard                          |     Periodic     |
+|     3    |     Academia and researchers           |     discussion on methods; peer-review; academic   discourse                        |     Dashboard     +     Methodology    |     Real-time    |
+|     4    |     General public                     |     Citizen involvement, public discourse, media and   information professionals    |     Website / Blog                     |     Periodic     |
+
+] <!--end of panel-->
+
+] <!-- end of panelset -->
+
+
+---
+# Results-I
+
+
+.panelset[
+
+.panel[.panel-name[Epidemic Curve]
+
+```{r load_packages_data, message=FALSE, warning=FALSE, include=FALSE}
+# Load Packages
+#---------------
+             
+## First specify the packages of interest
+packages = c("tidyverse", 
+             "incidence",
+             "projections",
+             "lubridate",
+             "foreach", 
+             "plotly",
+             "R0",
+             "magrittr",
+             "EpiEstim",
+             "flexdashboard",
+             "shiny",
+             "echarts4r",
+             "distcrete",
+             "epitrix",
+             "furrr",
+             "tictoc",
+             "future",
+             "data.table",
+             "tibbletime",
+             "mapview",
+             "leaflet",
+             "xts",
+             "sf",
+             "tbl2xts",
+             "gridExtra",
+             "dygraphs")
+
+## Now load or install&load all
+package.check <- lapply(
+  packages,
+  FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  }
+)
+
+# Create Rolling Mean function
+rolling_mean <- rollify(mean, window = 14)
+rolling_mean_21 <- rollify(mean, window = 21)
+# Serial Interval Distribution
+mGT <- generation.time("gamma", c(4.4,3))
+
+# Create Find Valley function
+find_valley <- function (x, pool = TRUE) 
+{
+  if (!inherits(x, "incidence")) {
+    stop("x is not an incidence object")
+  }
+  if (ncol(x$counts) > 1L && pool) {
+    msg <- paste("'x' is stratified by groups", "pooling groups before finding peaks", 
+                 sep = "\n")
+    message(msg)
+    x <- pool(x)
+  }
+  the_min <- apply(get_counts(x), MARGIN = 2L, FUN = which.min)
+  out <- stats::setNames(x$dates[the_min], colnames(x$counts))
+  out
+}
+
+# Create a function to fit the second wave
+second_peak_fit <- function(x){
+  x_fit <- fit(x)
+  if(ind_incid_second_peak < max(ind_incid_second$dates)-7){
+    date_to_split = ind_incid_second_peak
+    x_fit <- fit(x, split = date_to_split)
+  }
+  x_fit
+}
+
+# Create Incidence Objects
+options(scipen = 100)
+
+#df <- data.table::fread("https://api.covid19india.org/csv/latest/case_time_series.csv")
+#df <- data.table::fread("https://api.covid19india.org/csv/latest/districts.csv")
+case_time_series <- data.table::fread("https://api.covid19india.org/csv/latest/case_time_series.csv")
+
+state_wise <- data.table::fread("https://api.covid19india.org/csv/latest/state_wise.csv")
+state_wise_backup <- state_wise
+state_wise %<>% dplyr::select(State, State_code) %>% mutate(State = ifelse(State_code == "TT", "India", State))
+
+india_time_series <- data.table::fread("https://api.covid19india.org/csv/latest/state_wise_daily.csv")
+# Manipulate State_wise_time_series
+india_time_series %>% 
+  group_by(Status) %>% 
+  mutate(DN = DN + DD) %>%
+  mutate(Date = lubridate::ymd(Date_YMD)) %>% 
+  dplyr::select(-c("DD", "UN", "Date_YMD")) %>% 
+  ungroup() -> india_time_series
+
+colnames(india_time_series) <- dplyr::recode(
+  colnames(india_time_series), 
+  !!!setNames(as.character(state_wise$State), state_wise$State_code)
+)
+
+#readr::write_rds(india_time_series, "india_time_series.rds")
+```
+
+```{r epidemic_curve, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12,  fig.height = 5}
+
+state = "India"
+#state = append(state, "India")
+state_xts <- tbl_xts(india_time_series, cols_to_xts = state, spread_by = Status) 
+india_xts <- tbl_xts(india_time_series, cols_to_xts = "India", spread_by = Status)
+date_window <- c("2020-05-30", "2021-05-05")
+
+dygraph(state_xts, 
+        group = "state",
+        #main = "Weekly Average of Daily Caseload of COIVD-19 in India",
+        main = paste(state)) %>%
+  dyAxis("y", label = "Confirmed") %>%
+  dyAxis("y2", label = "Deceased", independentTicks = TRUE) %>%
+  dySeries("Deceased", axis = 'y2') %>% 
+  dyLegend(show = "follow") %>% 
+  dyRangeSelector(dateWindow = date_window) %>% 
+  dyRoller(rollPeriod = 14) %>% 
+  dyHighlight(highlightCircleSize = 5,
+              highlightSeriesBackgroundAlpha = 0.3, 
+              hideOnMouseOut = FALSE) %>% 
+  dyOptions(axisLineWidth = 1.5, fillGraph = TRUE,  drawGrid = FALSE)
+
+```
+
+] <!---End of Panel -->
+
+
+
+
+
+.panel[.panel-name[First & Second Wave]
+
+```{r first_and_second_wave_split, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12,  fig.height = 5}
+
+first_and_second_wave_split <-readr::read_rds("C:/Users/Arun/Dropbox/My PC (DESKTOP-DLD350S)/Desktop/PhD/COVID-19/Kerala/COVID19_Flexdashboard/first_and_second_wave_split.rds")
+first_and_second_wave_split
+
+```
+
+] <!---End of Panel -->
+
+.panel[.panel-name[Growth Rate]
+
+.pull-left[
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+state_epid_params <- readr::read_rds("C:/Users/Arun/Dropbox/My PC (DESKTOP-DLD350S)/Desktop/PhD/COVID-19/Kerala/COVID19_Flexdashboard/state_epid_params.rds")
+state_epid_params %>% 
+  filter(Time == "Before Peak") %>% 
+  mutate(State = fct_reorder(State, growth_rate, min)) %>% 
+  plot_ly(y = ~ State, x = ~ growth_rate, color = ~Wave, type = 'bar', orientation = 'h', showlegend = F)
+```
+]
+
+.pull-right[
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+state_epid_params %>% 
+  filter(Time == "Before Peak") %>% 
+  mutate(State = fct_reorder(State, growth_rate, max)) %>% 
+  plot_ly(y = ~ State, x = ~ growth_rate, color = ~Wave, type = 'bar', orientation = 'h')
+```
+]
+
+] <!---End of Panel -->
+
+.panel[.panel-name[Doubling Time]
+
+
+.pull-left[
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+state_epid_params %>% 
+  filter(Time == "Before Peak") %>% 
+  mutate(State = fct_reorder(State, doubling_time, max)) %>% 
+  plot_ly(y = ~ State, x = ~ doubling_time, color = ~Wave, type = 'bar', orientation = 'h', showlegend = F)
+```
+]
+
+.pull-right[
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+state_epid_params %>% 
+  filter(Time == "Before Peak") %>% 
+  mutate(State = fct_reorder(State, doubling_time, min)) %>% 
+  plot_ly(y = ~ State, x = ~ doubling_time, color = ~Wave, type = 'bar', orientation = 'h')
+```
+]
+
+] <!---End of Panel -->
+
+] <!---End of Panelset -->
+---
+class: middle 
+
+# Results-II 
+
+.panelset[
+
+.panel[.panel-name[CFR: National]
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=14,  fig.height = 6}
+
+statewise_daily_df <- readr::read_rds("C:/Users/Arun/Dropbox/My PC (DESKTOP-DLD350S)/Desktop/PhD/COVID-19/Kerala/COVID19_Flexdashboard/statewise_daily_df.rds")
+
+p <- ggplot((statewise_daily_df %>% 
+          filter(Date >= "2021-04-25") ), aes(x=Date, y=cfr_rm)) +
+  geom_smooth(method = loess, se = F) +
+  theme(legend.position = "none") +
+  ylab("Case Fatality Rate")
+ggplotly(p)
+```
+
+IS THE TREND SAME ACROSS ALL THE STATES??
+
+] <!---End of Panel -->
+
+.panel[.panel-name[CFR: State-I]
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=14,  fig.height = 6}
+p <- ggplot((statewise_daily_df %>% 
+          filter(Date >= "2021-04-25") ), aes(x=Date, y=cfr_rm, color = State)) +
+  geom_smooth(method = loess, se = F, alpha = 0.5) +
+  theme(legend.position = "none") +
+  ylab("Case Fatality Rate")
+ggplotly(p)
+```
+
+CLUTTERED??
+
+] <!---End of Panel -->
+
+.panel[.panel-name[CFR: State-II]
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=14,  fig.height = 6}
+
+statewise_daily_df %>% filter(Date == max(Date) -1 ) %>% mutate(State = as_factor(State)) -> final_cfr
+final_cfr$State <- fct_reorder(final_cfr$State, rolling_mean_21(final_cfr$cfr_rm), min)
+
+statewise_daily_df %>% 
+  filter(Date >= "2021-04-25") %>% 
+  mutate(`Case Fatality Rate` = rolling_mean_21(cfr_rm)) %>% 
+  mutate(State = factor(State, levels = levels(final_cfr$State))) %>% 
+  plotly::plot_ly(x = ~Date, y = ~State, z = ~`Case Fatality Rate`, color = ~State,  mode = "lines")
+
+
+```
+
+BETTER!!
+
+] <!---End of Panel -->
+
+
+] <!---End of Panelset -->
+
+---
+# Results-III
+
+.panelset[
+
+.panel[.panel-name[Effective Reproduction Number (Rt)]
+
+.pull-left[
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height = 6}
+india_r0_df <- readr::read_rds("C:/Users/Arun/Dropbox/My PC (DESKTOP-DLD350S)/Desktop/PhD/COVID-19/Kerala/COVID19_Flexdashboard/india_r0_df.rds")
+
+p <- ggplot(india_r0_df, aes(x = Date, y = r0)) + 
+  geom_line() +
+  geom_ribbon(aes(ymin=lower, ymax=upper), linetype=2, alpha=0.3)+
+  ylab("Time Dedpendent Reproduction Number (Rt)")
+ggplotly(p)
+```
+
+]
+
+.pull-right[
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height = 6}
+
+r0_states_plot <- readr::read_rds("C:/Users/Arun/Dropbox/My PC (DESKTOP-DLD350S)/Desktop/PhD/COVID-19/Kerala/COVID19_Flexdashboard/r0_states_plot.rds")
+
+r0_states_plot
+```
+]
+
+] <!---End of Panel -->
+
+.panel[.panel-name[Projections of Future Incidence]
+
+.pull-left[
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height = 6}
+state_projections_plot <- readr::read_rds("C:/Users/Arun/Dropbox/My PC (DESKTOP-DLD350S)/Desktop/PhD/COVID-19/Kerala/COVID19_Flexdashboard/state_projections_plot.rds")
+state_projections_plot[c("Andhra Pradesh",
+                         "Karnataka", 
+                         "Kerala",
+                         "Puducherry", 
+                         "Tamil Nadu", 
+                         "Telangana")] -> state_projections_plot_south
+
+grid.arrange(grobs = state_projections_plot_south, ncol = 2)
+```
+
+]
+
+.pull-right[
+
+
+```{r echo=FALSE, fig.height=6, message=FALSE, warning=FALSE,results='hide',fig.keep='all'}
+state_reduced_r0_plot <- readr::read_rds("C:/Users/Arun/Dropbox/My PC (DESKTOP-DLD350S)/Desktop/PhD/COVID-19/Kerala/COVID19_Flexdashboard/state_reduced_r0_plot.rds")
+state_reduced_r0_plot["Andhra Pradesh"] -> state_reduced_r0_plot_AP
+state_reduced_r0_plot_AP
+```
+]
+
+] <!---End of Panel -->
+
+
+.panel[.panel-name[Dashboard]
+
+### https://arunmitra.shinyapps.io/covid_dashboard/
+
+`r knitr::include_graphics("img/dashboard_homepage.png")`
+
+
+] <!---End of Panel -->
+
+
+] <!---End of Panelset -->
+---
+
+# Discussion
+
+.panelset[
+
+
+.panel[.panel-name[Inferences]
+## Key Inferences from Study Findings
+
+
+* Onset of the second wave in India
+
+* Onset on second wave varied within different states
+
+* Transmission parameters of first wave different from the second wave
+
+* Magnitude of second wave greater than the first
+
+* Issue of data quality needs to be addressed
+
+* 15-day future projections are a good fit considering the unavailability of data on other covariates/factors influencing caseload and mortality
+
+* Appropriate data visualization could reveal hidden patterns and newer insights
+
+
+
+]<!---End of Panel -->
+
+
+
+.panel[.panel-name[Features]
+## Salient Features
+
+Some of the salient features of the dashboard are:
+
+* Robust Estimates
+
+* Interactive in nature
+
+* Real-time estimation
+
+* Modular - new modules based on new evidence can be added 
+
+* Customizable
+
+* Open source
+
+]<!---End of Panel -->
+
+.panel[.panel-name[Dissemination]
+## Dissemination
+
+Some of the planned pathways for dissemination of the dashboard are:
+
+* Sree Chitra Tirunal Institute for Health Sciences and Technology which is under the Department of Science and Technology, has been identified by the Government of India as the Regional Center of Excellence (RoCE) for training in the management of COVID-19 epidemic in India. 
+
+* As part of the training of the district-level program managers of Kerala, the findings of the study would be shared as an interactive dashboard for aiding in decision making. 
+
+* This could in turn promote data use culture and evidence-informed decision making.
+
+* We also shared some of the findings of our study with the general public in the form of blog posts to invite citizen participation and public discussion.
+
+
+]<!---End of Panel -->
+
+.panel[.panel-name[Conclusion]
+## Conclusion
+
+The study demonstrates the usefulness of data science approach coupled with robust epidemiological techniques in the application and development of an interactive and intuitive dashboard for aiding in decison making for COVID-19 in India.
+]<!---End of Panel -->
+
+]<!---End of Panelset -->
+
+
+---
+class: middle  center
+
+
+# THANK YOU
